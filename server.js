@@ -12,8 +12,12 @@ const dbName = 'trackable';
 const client = new MongoClient(url);
 
 
-app.set('port', 3000);
-app.listen(app.get('port'));
+/*app.set('port', 3000);
+app.listen(process.env.PORT || app.get('port'));*/
+const PORT = process.env.PORT || 3000;
+app.listen(PORT, () => {
+    console.log(`Our app is running on port ${ PORT }`);
+});
 
 let newUrl;
 let newID;
