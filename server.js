@@ -1,8 +1,10 @@
 const express = require('express');
 const MongoClient = require('mongodb').MongoClient;
 const assert = require('assert');
-
+const cors = require('cors');
 const app = express();
+
+app.use(cors());
 
 // Connection URL
 const url = 'mongodb+srv://testUser:test123@cluster0-tu18z.mongodb.net/test?retryWrites=true&w=majority';
