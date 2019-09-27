@@ -17,6 +17,7 @@ const client = new MongoClient(url);
 /*app.set('port', 3000);
 app.listen(process.env.PORT || app.get('port'));*/
 const PORT = process.env.PORT || 3000;
+
 app.listen(PORT, () => {
     console.log(`Our app is running on port ${ PORT }`);
 });
@@ -29,6 +30,12 @@ app.get('/', function(req, res) {
 })
 
 // Express
+app.options('/create', function (req, res) {
+    res.setHeader("Access-Control-Allow-Origin", "*");
+    res.setHeader('Access-Control-Allow-Methods', '*');
+    res.setHeader("Access-Control-Allow-Headers", "*");
+    res.end();
+});
 app.get('/create/:id/:url', function(req, res) {
     //res.send(req.params.url);
     newUrl = req.params.url;
@@ -51,6 +58,12 @@ app.get('/create/:id/:url', function(req, res) {
     
 })
 
+app.options('/link', function (req, res) {
+    res.setHeader("Access-Control-Allow-Origin", "*");
+    res.setHeader('Access-Control-Allow-Methods', '*');
+    res.setHeader("Access-Control-Allow-Headers", "*");
+    res.end();
+});
 app.get('/link/:id/', function(req, res) {
 
     client.connect(function(err) {
@@ -85,6 +98,12 @@ app.get('/link/:id/', function(req, res) {
     })
 })
 
+app.options('/stats', function (req, res) {
+    res.setHeader("Access-Control-Allow-Origin", "*");
+    res.setHeader('Access-Control-Allow-Methods', '*');
+    res.setHeader("Access-Control-Allow-Headers", "*");
+    res.end();
+});
 app.get('/stats/:id', function(req, res) {
 
     client.connect(function(err) {
