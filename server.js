@@ -30,11 +30,6 @@ app.get('/', function(req, res) {
 
 // Express
 app.get('/create/:id/:url', function(req, res) {
-    
-    res.header("Access-Control-Allow-Origin", "http://localhost:3000"); // update to match the domain you will make the request from
-    res.header("Access-Control-Allow-Headers", "Origin, X-Requested-With, Content-Type, Accept");
-    next();
-
     //res.send(req.params.url);
     newUrl = req.params.url;
     newID = req.params.id;
@@ -57,10 +52,6 @@ app.get('/create/:id/:url', function(req, res) {
 })
 
 app.get('/link/:id/', function(req, res) {
-
-    res.header("Access-Control-Allow-Origin", "http://localhost:3000"); // update to match the domain you will make the request from
-    res.header("Access-Control-Allow-Headers", "Origin, X-Requested-With, Content-Type, Accept");
-    next();
 
     client.connect(function(err) {
         assert.equal(null, err);
@@ -95,10 +86,6 @@ app.get('/link/:id/', function(req, res) {
 })
 
 app.get('/stats/:id', function(req, res) {
-
-    res.header("Access-Control-Allow-Origin", "http://localhost:3000"); // update to match the domain you will make the request from
-    res.header("Access-Control-Allow-Headers", "Origin, X-Requested-With, Content-Type, Accept");
-    next();
 
     client.connect(function(err) {
         assert.equal(null, err);
