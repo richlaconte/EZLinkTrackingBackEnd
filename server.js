@@ -32,7 +32,7 @@ app.get('/', function(req, res) {
 // Express
 app.options('/create', function (req, res) {
     res.setHeader("Access-Control-Allow-Origin", "*");
-    res.setHeader("Access-Control-Allow-Methods", "GET, POST, OPTIONS, PUT, DELETE");
+    res.setHeader("Access-Control-Allow-Methods", "GET");
     res.setHeader("Access-Control-Allow-Headers", "*");
     res.end();
 });
