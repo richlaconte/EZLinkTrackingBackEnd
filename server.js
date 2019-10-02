@@ -36,6 +36,20 @@ app.options('/create', function (req, res) {
     res.setHeader("Access-Control-Allow-Headers", "*");
     res.end();
 });
+
+app.options('/link', function (req, res) {
+    res.setHeader("Access-Control-Allow-Origin", "*");
+    res.setHeader("Access-Control-Allow-Methods", "GET");
+    res.setHeader("Access-Control-Allow-Headers", "*");
+    res.end();
+});
+
+app.options('/stats', function (req, res) {
+    res.setHeader("Access-Control-Allow-Origin", "*");
+    res.setHeader("Access-Control-Allow-Methods", "GET");
+    res.setHeader("Access-Control-Allow-Headers", "*");
+    res.end();
+});
 app.get('/create/:id/:url', function(req, res) {
     
     if (req.params.url && req.params.id) {
@@ -63,12 +77,6 @@ app.get('/create/:id/:url', function(req, res) {
     
 })
 
-app.options('/link', function (req, res) {
-    res.setHeader("Access-Control-Allow-Origin", "*");
-    res.setHeader("Access-Control-Allow-Methods", "GET");
-    res.setHeader("Access-Control-Allow-Headers", "*");
-    res.end();
-});
 app.get('/link/:id/', function(req, res) {
 
     client.connect(function(err) {
@@ -103,12 +111,6 @@ app.get('/link/:id/', function(req, res) {
     })
 })
 
-app.options('/stats', function (req, res) {
-    res.setHeader("Access-Control-Allow-Origin", "*");
-    res.setHeader("Access-Control-Allow-Methods", "GET");
-    res.setHeader("Access-Control-Allow-Headers", "*");
-    res.end();
-});
 app.get('/stats/:id', function(req, res) {
 
     client.connect(function(err) {
