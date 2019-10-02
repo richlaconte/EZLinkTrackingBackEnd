@@ -65,7 +65,7 @@ app.get('/create/:id/:url', function(req, res) {
 
 app.options('/link', function (req, res) {
     res.setHeader("Access-Control-Allow-Origin", "*");
-    res.setHeader('Access-Control-Allow-Methods', '*');
+    res.setHeader("Access-Control-Allow-Methods", "GET");
     res.setHeader("Access-Control-Allow-Headers", "*");
     res.end();
 });
@@ -105,7 +105,7 @@ app.get('/link/:id/', function(req, res) {
 
 app.options('/stats', function (req, res) {
     res.setHeader("Access-Control-Allow-Origin", "*");
-    res.setHeader('Access-Control-Allow-Methods', '*');
+    res.setHeader("Access-Control-Allow-Methods", "GET");
     res.setHeader("Access-Control-Allow-Headers", "*");
     res.end();
 });
