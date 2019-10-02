@@ -80,7 +80,7 @@ app.get('/create/:id/:url', function(req, res) {
 app.get('/link/:id/', function(req, res) {
 
     client.connect(function(err) {
-        assert.equal(null, err);
+        
         console.log("Connected to the server");
 
         const db = client.db(dbName);
@@ -102,7 +102,7 @@ app.get('/link/:id/', function(req, res) {
         )
 
         collection.find({ id }).toArray(function(err, docs) {
-            assert.equal(err, null);
+            
             
             res.redirect("https://" + docs[0].redirect);
         })
@@ -114,7 +114,7 @@ app.get('/link/:id/', function(req, res) {
 app.get('/stats/:id', function(req, res) {
 
     client.connect(function(err) {
-        assert.equal(null, err);
+        
         console.log("Connected to the server");
 
         const db = client.db(dbName);
@@ -124,7 +124,7 @@ app.get('/stats/:id', function(req, res) {
         const collection = db.collection('track');
 
         collection.find({ id }).toArray(function(err, docs) {
-            assert.equal(err, null);
+            
             res.send(docs);
         })
 
