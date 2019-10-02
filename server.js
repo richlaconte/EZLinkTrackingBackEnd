@@ -96,17 +96,22 @@ app.get('/link/:id/', function(req, res) {
 
         let time = h + ":" + m + ":" + s;
 
-        collection.update(
-            { id: id },
-            { $push: { newClicks: { time: time } } }
-        )
+        try {
+            collection.update(
+                { id: id },
+                { $push: { newClicks: { time: time } } }
+            )
+    
+            collection.find({ id }).toArray(function(err, docs) {
+                
+                if (docs) {
+                    res.redirect("https://" + docs[0].redirect);
+                }
+            })
+        } catch(err) {
 
-        collection.find({ id }).toArray(function(err, docs) {
-            
-            
-            res.redirect("https://" + docs[0].redirect);
-        })
-
+        }
+        
         client.close();
     })
 })
