@@ -37,23 +37,28 @@ app.options('/create', function (req, res) {
     res.end();
 });
 app.get('/create/:id/:url', function(req, res) {
-    //res.send(req.params.url);
-    newUrl = req.params.url;
-    newID = req.params.id;
-    newClicks = [];
+    
+    if (req.params.url && req.params.id) {
+        //res.send(req.params.url);
+        newUrl = req.params.url;
+        newID = req.params.id;
+        newClicks = [];
 
-    //Use connect method to connect to the server
-    client.connect(function(err) {
-        assert.equal(null, err);
-        console.log("Connected to the server");
+        //Use connect method to connect to the server
+        client.connect(function(err) {
+            assert.equal(null, err);
+            console.log("Connected to the server");
 
-        const db = client.db(dbName);
+            const db = client.db(dbName);
 
-        insertDocuments(db, function() {
-            client.close();
+            insertDocuments(db, function() {
+                client.close();
+            });
         });
-    });
-
+        res.send("created " + req.params.id);
+    }
+    
+    res.send("missing params or other issue");
     //res.redirect("https://" + newUrl);
     
 })
