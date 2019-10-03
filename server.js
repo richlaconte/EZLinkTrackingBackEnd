@@ -105,8 +105,8 @@ app.get('/link/:id/', function(req, res) {
                 collection.find({ id }).toArray(function(err, docs) {
                 
                     
-                        if (docs[0] === !null) {
-                            if (docs[0].redirect === !null) {
+                        if (docs[0]) {
+                            if (docs[0].redirect) {
                                 res.redirect("https://" + docs[0].redirect);
                             } else {
                                 res.send("oops4");
