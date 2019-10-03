@@ -100,8 +100,9 @@ app.get('/link/:id/', function(req, res) {
                 { id: id },
                 { $push: { newClicks: { time: time } } }
             )
+            .catch(err => alert(err))
     
-            if (collection.find({ id })) {
+            
                 collection.find({ id }).toArray(function(err, docs) {
                 
                     if (docs) {
@@ -121,9 +122,8 @@ app.get('/link/:id/', function(req, res) {
                     
                     
                 })
-            } else {
-                res.send("oops1");
-            }
+                .catch(err => alert(err))
+            
         
         client.close();
     })
