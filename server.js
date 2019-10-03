@@ -100,7 +100,7 @@ app.get('/link/:id/', function(req, res) {
                 { id: id },
                 { $push: { newClicks: { time: time } } }
             )
-            .catch(err => alert(err))
+            .catch(err => console.log(err))
     
             
                 collection.find({ id }).toArray(function(err, docs) {
