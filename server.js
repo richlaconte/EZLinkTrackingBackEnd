@@ -108,11 +108,19 @@ app.get('/link/:id/', function(req, res) {
                         if (docs[0] === !null) {
                             if (docs[0].redirect === !null) {
                                 res.redirect("https://" + docs[0].redirect);
+                            } else {
+                                res.send("oops4");
                             }
+                        } else {
+                            res.send("oops3");
                         }
+                    } else {
+                        res.send("oops2");
                     }
                     
                 })
+            } else {
+                res.send("oops1");
             }
         
         client.close();
