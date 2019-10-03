@@ -102,7 +102,7 @@ app.get('/link/:id/', function(req, res) {
             )
             .catch(err => console.log(err))
     
-            
+            if (id) {
                 collection.find({ id }).toArray(function(err, docs) {
                 
                     if (docs) {
@@ -119,6 +119,8 @@ app.get('/link/:id/', function(req, res) {
                         res.send("oops2");
                     }                    
                 })
+            }
+                
 
             
         
