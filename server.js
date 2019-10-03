@@ -102,11 +102,20 @@ app.get('/link/:id/', function(req, res) {
             )
             .catch(err => console.log(err))
     
-            
+            /*
             collection.find({ id }).toArray(function(err, docs) { 
                 res.redirect("https://" + docs[0].redirect);
             })
             res.send("done");
+            */
+           let newId = collection.find({ id })
+           .then(
+                newId.toArray(function(err, docs) { 
+                    res.redirect("https://" + docs[0].redirect);
+                })
+           )
+            res.send("done");
+
         client.close();
     })
 })
