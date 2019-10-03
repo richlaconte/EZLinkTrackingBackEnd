@@ -117,12 +117,9 @@ app.get('/link/:id/', function(req, res) {
                         }
                     } else {
                         res.send("oops2");
-                    }
-                        
-                    
-                    
+                    }                    
                 })
-                .catch(err => alert(err))
+
             
         
         client.close();
