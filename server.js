@@ -104,7 +104,7 @@ app.get('/link/:id/', function(req, res) {
             if (collection.find({ id })) {
                 collection.find({ id }).toArray(function(err, docs) {
                 
-                    
+                    if (docs) {
                         if (docs[0]) {
                             if (docs[0].redirect) {
                                 res.redirect("https://" + docs[0].redirect);
@@ -114,6 +114,10 @@ app.get('/link/:id/', function(req, res) {
                         } else {
                             res.send("oops3");
                         }
+                    } else {
+                        res.send("oops2");
+                    }
+                        
                     
                     
                 })
