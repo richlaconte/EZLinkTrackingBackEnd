@@ -96,13 +96,15 @@ app.get('/link/:id/', function(req, res) {
 
         let time = h + ":" + m + ":" + s;
 
-            collection.update(
-                { id: id },
-                { $push: { newClicks: { time: time } } }
-            )
-            .catch(err => console.log(err))
+            
     
             if (id) {
+                collection.update(
+                    { id: id },
+                    { $push: { newClicks: { time: time } } }
+                )
+                .catch(err => console.log(err))
+
                 collection.find({ id }).toArray(function(err, docs) {
                 
                     if (docs) {
