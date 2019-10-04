@@ -97,8 +97,8 @@ app.get('/link/:id/', function(req, res) {
         let time = h + ":" + m + ":" + s;
 
             try {
-                collection.update(
-                    { id: id },
+                collection.updateOne(
+                    { "id": id },
                     { $push: { newClicks: { time: time } } }
                 )
                 .catch(err => console.log(err))
