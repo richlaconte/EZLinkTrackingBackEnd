@@ -96,11 +96,17 @@ app.get('/link/:id/', function(req, res) {
 
         let time = h + ":" + m + ":" + s;
 
-            collection.update(
-                { id: id },
-                { $push: { newClicks: { time: time } } }
-            )
-            .catch(err => console.log(err))
+            try {
+                collection.update(
+                    { id: id },
+                    { $push: { newClicks: { time: time } } }
+                )
+                .catch(err => console.log(err))
+            }
+            catch(err) {
+                console.log(err.message);
+            }
+            
     
             
             collection.find({ id }).toArray(function(err, docs) { 
