@@ -79,13 +79,13 @@ app.get('/create/:id/:url', function(req, res) {
 
 app.get('/link/:id/', function(req, res) {
 
+    let id = req.params.id;
+
     client.connect(function(err) {
         
         console.log("Connected to the server");
 
         const db = client.db(dbName);
-
-        let id = req.params.id;
 
         const collection = db.collection('track');
 
