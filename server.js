@@ -105,6 +105,7 @@ app.get('/link/:id/', function(req, res) {
             }
             catch(err) {
                 console.log(err.message);
+                res.send(err.message)
             }
             
     
@@ -115,10 +116,10 @@ app.get('/link/:id/', function(req, res) {
                 }
                 catch(err) {
                     console.log(err.message);
+                    res.send(err.message)
                 }
                 
             })
-            res.send("done");
             
 
         client.close();
