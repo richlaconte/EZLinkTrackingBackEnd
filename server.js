@@ -11,35 +11,40 @@ dotenv.config({
 });
 
 app.use(cors());
+app.use(express.json());
 
 // Connection URL
 const url = process.env.DB;
 // Database Name
 const dbName = 'trackable';
 // New MongoClient
-const client = new MongoClient(url);
+const client = new MongoClient(url, { useUnifiedTopology: true, useNewUrlParser: true });
 
 
 const PORT = process.env.PORT || 3000;
 
 app.listen(PORT, () => {
-    console.log(`Our app is running on port ${ PORT }`);
+    console.log(`App is running on port ${ PORT }`);
 });
-
-let newUrl;
-let newID;
 
 app.get('/', function(req, res) {
     res.send("<h1>App Page</h1>");
 })
 
-app.get('/create/:id/:url', cors(), function(req, res) {
+// Create new link
+app.post('/link', cors(), function(req, res) {
+    //res.send("ID is: " + req.body.id);
+    // Looking for id: __ and redirect:__
     
-    if (req.params.url && req.params.id) {
-        //res.send(req.params.url);
-        newUrl = req.params.url;
-        newID = req.params.id;
-        newClicks = [];
+    if (req.body.id && req.body.redirect) {
+        let newUrl = req.body.redirect;
+        let newID = req.body.id;
+
+        let newItem = {
+            "id": newID,
+            "redirect": newUrl,
+            "newClicks": []
+        }
 
         //Use connect method to connect to the server
         client.connect(function(err) {
@@ -47,17 +52,16 @@ app.get('/create/:id/:url', cors(), function(req, res) {
             console.log("Connected to the server");
 
             const db = client.db(dbName);
+            const collection = db.collection('track');
 
-            insertDocuments(db, function() {
-                client.close();
-            });
+            collection.insertOne(newItem)
+                .then(res => console.log(`Successfully inserted item with _id: ${res.insertedId}`))
+                .catch(err => console.error(`Failed to insert item: ${err}`))
         });
-        res.send("created " + req.params.id);
+        return res.send("created " + newID);
     }
     
     res.send("missing params or other issue");
-    //res.redirect("https://" + newUrl);
-    
 })
 
 app.get('/link/:id/', cors(), function(req, res) {
@@ -167,32 +171,10 @@ app.get('/stats/total/:id', cors(), function(req, res) {
             }
         })
 
-
-
         client.close();
 
     })
 })
-
-const insertDocuments = function(db, callback) {
-    // Get the documents collection
-    const collection = db.collection('track');
-    // Insert some documents
-    
-    let today = new Date();
-    let h = today.getHours();
-    let m = today.getMinutes();
-    let s = today.getSeconds();
-
-    let time = h + ":" + m + ":" + s;
-
-    myobj = {id: newID, time: time, redirect: newUrl, newClicks: newClicks};
-
-    collection.insertOne(myobj, function(err, res) {
-        if(err) throw err;
-        console.log("1 document inserted");
-    })
-}
 
 let upTime = 0;
 setInterval(function(){upTime++}, 1000);
