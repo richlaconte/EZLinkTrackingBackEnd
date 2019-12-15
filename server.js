@@ -4,7 +4,6 @@ const assert = require('assert');
 const cors = require('cors');
 const dotenv = require('dotenv');
 const app = express();
-const jwt = require('jsonwebtoken');
 
 // Dotenv Config
 dotenv.config({
@@ -21,8 +20,6 @@ const dbName = 'trackable';
 const client = new MongoClient(url);
 
 
-/*app.set('port', 3000);
-app.listen(process.env.PORT || app.get('port'));*/
 const PORT = process.env.PORT || 3000;
 
 app.listen(PORT, () => {
@@ -36,50 +33,6 @@ app.get('/', function(req, res) {
     res.send("<h1>App Page</h1>");
 })
 
-// Express
-/*
-app.options('/create', function (req, res) {
-    res.setHeader("Access-Control-Allow-Origin", "*");
-    res.setHeader("Access-Control-Allow-Methods", "GET");
-    res.setHeader("Access-Control-Allow-Headers", "*");
-    res.end();
-});
-
-app.options('/link', function (req, res) {
-    res.setHeader("Access-Control-Allow-Origin", "*");
-    res.setHeader("Access-Control-Allow-Methods", "GET");
-    res.setHeader("Access-Control-Allow-Headers", "*");
-    res.end();
-});
-
-app.options('/stats', function (req, res) {
-    res.setHeader("Access-Control-Allow-Origin", "*");
-    res.setHeader("Access-Control-Allow-Methods", "GET");
-    res.setHeader("Access-Control-Allow-Headers", "*");
-    res.end();
-});
-
-app.options('/stats/all', function (req, res) {
-    res.setHeader("Access-Control-Allow-Origin", "*");
-    res.setHeader("Access-Control-Allow-Methods", "GET");
-    res.setHeader("Access-Control-Allow-Headers", "*");
-    res.end();
-});
-
-app.options('/stats/total', function (req, res) {
-    res.setHeader("Access-Control-Allow-Origin", "*");
-    res.setHeader("Access-Control-Allow-Methods", "GET");
-    res.setHeader("Access-Control-Allow-Headers", "*");
-    res.end();
-});
-
-app.options('/account', function (req, res) {
-    res.setHeader("Access-Control-Allow-Origin", "*");
-    res.setHeader("Access-Control-Allow-Methods", "GET");
-    res.setHeader("Access-Control-Allow-Headers", "*");
-    res.end();
-});
-*/
 app.get('/create/:id/:url', cors(), function(req, res) {
     
     if (req.params.url && req.params.id) {
@@ -220,60 +173,6 @@ app.get('/stats/total/:id', cors(), function(req, res) {
 
     })
 })
-/*
-app.post('/account/info', verifyToken, (req, res) => {
-    jwt.verify(req.token, 'secretkey', (err, authData) => {
-        if(err) {
-            res.sendStatus(403);
-        } else {
-            res.json({
-                message: 'Post Created...',
-                authData
-            });
-        }
-    });
-});
-
-app.post('/account/login', (req, res) => {
-    //Mock user
-    const user = {
-        id: 1,
-        username: 'richard',
-        email: 'brad@gmail.com'
-    }
-
-    jwt.sign({user}, 'secretkey', (err, token) => {
-        res.json({
-            token
-        });
-    });
-    
-    jwt.sign()
-});
-
-//Format of Token
-// Authorization: Bearer <acces_token>
-
-//Verify Token
-function verifyToken(req, res, next) {
-    // Get Auth Header Value
-    const bearerHeader = req.headers['authorization'];
-    // Check if bearer is undefined
-    if (typeof bearerHeader !== 'undefined') {
-      //Split at the space
-      const bearer = bearerHeader.split(' ');
-      // Get token from array
-      const bearerToken = bearer[1];
-      // Set the token
-      req.token = bearerToken;
-      // Next middleware
-      next();
-    } else {
-        // Forbidden
-        res.sendStatus(403);
-    }
-}
-*/
 
 const insertDocuments = function(db, callback) {
     // Get the documents collection
