@@ -98,17 +98,13 @@ app.get('/link/:id/', cors(), function(req, res) {
 
         let time = month +  "/" + day + " - " + hour + ":" + min + ":" + sec;
 
-            try {
-                collection.updateOne(
-                    { "id": id },
-                    { $push: { clicks: { dateTime: time } } }
-                )
-                .catch(err => console.log(err))
-            }
-            catch(err) {
-                console.log(err.message);
-                res.send(err.message);
-            }
+            
+            collection.updateOne(
+                { "id": id },
+                { $push: { clicks: { dateTime: time } } }
+            )
+            .catch(err => console.log(err))
+            
             
             collection.find({ id }).toArray(function(err, docs) { 
                 try {
@@ -140,12 +136,8 @@ app.get('/stats/:id', cors(), function(req, res) {
             if (err) {
                 res.sendStatus(403);
             } else {
-                try {
-                    res.send(docs[0].newClicks);
-                }
-                catch(error){
-                    res.send(error);
-                }
+                console.log(docs[0]);
+                res.send(docs[0].clicks);
             }
         })
         client.close();
