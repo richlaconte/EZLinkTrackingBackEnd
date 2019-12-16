@@ -33,9 +33,7 @@ app.get('/', function(req, res) {
 
 // Create new link
 app.post('/link', cors(), function(req, res) {
-    //res.send("ID is: " + req.body.id);
-    // Looking for id: __ and redirect:__
-    
+    // Looking for id: __ and redirect:__ in body of request
     if (req.body.id && req.body.redirect) {
         let newUrl = req.body.redirect;
         let newID = req.body.id;
@@ -43,10 +41,9 @@ app.post('/link', cors(), function(req, res) {
         let newItem = {
             "id": newID,
             "redirect": newUrl,
-            "newClicks": []
+            "clicks": []
         }
 
-        //Use connect method to connect to the server
         client.connect(function(err) {
             assert.equal(null, err);
             console.log("Connected to the server");
@@ -54,16 +51,31 @@ app.post('/link', cors(), function(req, res) {
             const db = client.db(dbName);
             const collection = db.collection('track');
 
-            collection.insertOne(newItem)
-                .then(res => console.log(`Successfully inserted item with _id: ${res.insertedId}`))
-                .catch(err => console.error(`Failed to insert item: ${err}`))
+            try {
+                collection.find({ id: newID }).toArray(function(err, docs) {
+                    // Check if ID already exists
+                    if (docs.length > 0) {
+                        res.status(409);
+                        return res.send("ID already exists. Please try a new one.");
+                    } else {
+                        collection.insertOne(newItem)
+                        .then(res => console.log(`Successfully inserted item with _id: ${res.insertedId}`))
+                        .catch(err => console.error(`Failed to insert item: ${err}`))
+                        return res.send("created " + newID);
+                    }
+                })
+            } catch(err) {
+                console.log(err.message);
+                res.send(err.message);
+            } 
+            client.close();
         });
-        return res.send("created " + newID);
+
     }
-    
-    res.send("missing params or other issue");
 })
 
+// Route used to access link
+// Records click and redirects client
 app.get('/link/:id/', cors(), function(req, res) {
 
     let id = req.params.id;
@@ -77,25 +89,26 @@ app.get('/link/:id/', cors(), function(req, res) {
         const collection = db.collection('track');
 
         let today = new Date();
-        let h = today.getHours();
-        let m = today.getMinutes();
-        let s = today.getSeconds();
+        // Added +1 to month to return 1-12 instead of 0-11
+        let month = today.getMonth() + 1;
+        let day = today.getDate();
+        let hour = today.getHours();
+        let min = today.getMinutes();
+        let sec = today.getSeconds();
 
-        let time = h + ":" + m + ":" + s;
+        let time = month +  "/" + day + " - " + hour + ":" + min + ":" + sec;
 
             try {
-                collection.update(
+                collection.updateOne(
                     { "id": id },
-                    { $push: { newClicks: { time: time } } }
+                    { $push: { clicks: { dateTime: time } } }
                 )
                 .catch(err => console.log(err))
             }
             catch(err) {
                 console.log(err.message);
-                res.send(err.message)
+                res.send(err.message);
             }
-            
-    
             
             collection.find({ id }).toArray(function(err, docs) { 
                 try {
@@ -104,45 +117,14 @@ app.get('/link/:id/', cors(), function(req, res) {
                 catch(err) {
                     console.log(err.message);
                     res.send(err.message)
-                }
-                
+                }  
             })
-            
-
         client.close();
     })
 })
 
-app.get('/stats/all/:id', cors(), function(req, res) {
-
-    let id = req.params.id;
-
-    client.connect(function(err) {
-        
-        console.log("Connected to the server");
-
-        const db = client.db(dbName);
-
-        const collection = db.collection('track');
-
-        try {
-            collection.find({ id }).toArray(function(err, docs) {
-            
-                res.send(docs);
-            })
-        } catch (err) {
-            res.send(err);
-        }
-        
-
-
-
-        client.close();
-
-    })
-})
-
-app.get('/stats/total/:id', cors(), function(req, res) {
+// Return the array of clicks of a certain link
+app.get('/stats/:id', cors(), function(req, res) {
 
     client.connect(function(err) {
         
@@ -159,20 +141,14 @@ app.get('/stats/total/:id', cors(), function(req, res) {
                 res.sendStatus(403);
             } else {
                 try {
-                    //res.send(docs.id);
-                    docs.find({ newClicks }).toArray(function(err, docs2) {
-            
-                        res.send(docs2);
-                    })
+                    res.send(docs[0].newClicks);
                 }
                 catch(error){
                     res.send(error);
                 }
             }
         })
-
         client.close();
-
     })
 })
 
@@ -184,5 +160,5 @@ app.get('/logs', function(req, res) {
     let minutesRounded = Math.floor(minutes);
     let hours = minutes / 60;
     let hoursRounded = Math.floor(hours);
-    res.send("<h1>Logs</h1><h3>Uptime at page load: " + hoursRounded + " hours</h3>");
+    res.send("<h1>Logs</h1><h3>Uptime at page load: " + minutes + " minutes</h3><h3>Uptime at page load: " + hours + " hours</h3>");
 })
