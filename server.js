@@ -35,8 +35,8 @@ app.get('/', function(req, res) {
 app.post('/link', cors(), function(req, res) {
     // Looking for id: __ and redirect:__ in body of request
     if (req.body.id && req.body.redirect) {
-        let newUrl = req.body.redirect;
-        let newID = req.body.id;
+        let newUrl = req.body.redirect.trim();
+        let newID = req.body.id.trim();
 
         let newItem = {
             "id": newID,
@@ -78,7 +78,7 @@ app.post('/link', cors(), function(req, res) {
 // Records click and redirects client
 app.get('/link/:id/', cors(), function(req, res) {
 
-    let id = req.params.id;
+    let id = req.params.id.trim();
 
     client.connect(function(err) {
         
@@ -128,7 +128,7 @@ app.get('/stats/:id', cors(), function(req, res) {
 
         const db = client.db(dbName);
 
-        let id = req.params.id;
+        let id = req.params.id.trim();
 
         const collection = db.collection('track');
 
