@@ -4,6 +4,7 @@ const assert = require('assert');
 const cors = require('cors');
 const dotenv = require('dotenv');
 const app = express();
+const accounts = require('./accounts');
 
 // Dotenv Config
 dotenv.config({
@@ -12,6 +13,9 @@ dotenv.config({
 
 app.use(cors());
 app.use(express.json());
+
+// Routes
+app.use('/accounts', accounts);
 
 // Connection URL
 const url = process.env.DB;
@@ -24,15 +28,15 @@ const client = new MongoClient(url, { useUnifiedTopology: true, useNewUrlParser:
 const PORT = process.env.PORT || 3000;
 
 app.listen(PORT, () => {
-    console.log(`App is running on port ${ PORT }`);
+    console.log(`App is running on port ${PORT}`);
 });
 
-app.get('/', function(req, res) {
+app.get('/', function (req, res) {
     res.send("<h1>App Page</h1>");
 })
 
 // Create new link
-app.post('/link', cors(), function(req, res) {
+app.post('/link', cors(), function (req, res) {
     // Looking for id: __ and redirect:__ in body of request
     if (req.body.id && req.body.redirect) {
         let newUrl = req.body.redirect;
@@ -44,7 +48,7 @@ app.post('/link', cors(), function(req, res) {
             "clicks": []
         }
 
-        client.connect(function(err) {
+        client.connect(function (err) {
             assert.equal(null, err);
             console.log("Connected to the server");
 
@@ -52,22 +56,22 @@ app.post('/link', cors(), function(req, res) {
             const collection = db.collection('track');
 
             try {
-                collection.find({ id: newID }).toArray(function(err, docs) {
+                collection.find({ id: newID }).toArray(function (err, docs) {
                     // Check if ID already exists
                     if (docs.length > 0) {
                         res.status(409);
                         return res.send("ID already exists. Please try a new one.");
                     } else {
                         collection.insertOne(newItem)
-                        .then(res => console.log(`Successfully inserted item with _id: ${res.insertedId}`))
-                        .catch(err => console.error(`Failed to insert item: ${err}`))
+                            .then(res => console.log(`Successfully inserted item with _id: ${res.insertedId}`))
+                            .catch(err => console.error(`Failed to insert item: ${err}`))
                         return res.send("created " + newID);
                     }
                 })
-            } catch(err) {
+            } catch (err) {
                 console.log(err.message);
                 res.send(err.message);
-            } 
+            }
             client.close();
         });
 
@@ -76,12 +80,12 @@ app.post('/link', cors(), function(req, res) {
 
 // Route used to access link
 // Records click and redirects client
-app.get('/link/:id/', cors(), function(req, res) {
+app.get('/link/:id/', cors(), function (req, res) {
 
     let id = req.params.id;
 
-    client.connect(function(err) {
-        
+    client.connect(function (err) {
+
         console.log("Connected to the server");
 
         const db = client.db(dbName);
@@ -96,34 +100,34 @@ app.get('/link/:id/', cors(), function(req, res) {
         let min = today.getMinutes();
         let sec = today.getSeconds();
 
-        let time = month +  "/" + day + " - " + hour + ":" + min + ":" + sec;
+        let time = month + "/" + day + " - " + hour + ":" + min + ":" + sec;
 
-            
-            collection.updateOne(
-                { "id": id },
-                { $push: { clicks: { dateTime: time } } }
-            )
+
+        collection.updateOne(
+            { "id": id },
+            { $push: { clicks: { dateTime: time } } }
+        )
             .catch(err => console.log(err))
-            
-            
-            collection.find({ id }).toArray(function(err, docs) { 
-                try {
-                    res.redirect("https://" + docs[0].redirect);
-                }
-                catch(err) {
-                    console.log(err.message);
-                    res.send(err.message)
-                }  
-            })
+
+
+        collection.find({ id }).toArray(function (err, docs) {
+            try {
+                res.redirect("https://" + docs[0].redirect);
+            }
+            catch (err) {
+                console.log(err.message);
+                res.send(err.message)
+            }
+        })
         client.close();
     })
 })
 
 // Return the array of clicks of a certain link
-app.get('/stats/:id', cors(), function(req, res) {
+app.get('/stats/:id', cors(), function (req, res) {
 
-    client.connect(function(err) {
-        
+    client.connect(function (err) {
+
         console.log("Connected to the server");
 
         const db = client.db(dbName);
@@ -132,7 +136,7 @@ app.get('/stats/:id', cors(), function(req, res) {
 
         const collection = db.collection('track');
 
-        collection.find({ id }).toArray(function(err, docs) {
+        collection.find({ id }).toArray(function (err, docs) {
             if (err) {
                 res.sendStatus(403);
             } else {
@@ -145,9 +149,9 @@ app.get('/stats/:id', cors(), function(req, res) {
 })
 
 let upTime = 0;
-setInterval(function(){upTime++}, 1000);
+setInterval(function () { upTime++ }, 1000);
 
-app.get('/logs', function(req, res) {
+app.get('/logs', function (req, res) {
     let minutes = upTime / 60;
     let minutesRounded = Math.floor(minutes);
     let hours = minutes / 60;
