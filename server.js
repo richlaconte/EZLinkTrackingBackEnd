@@ -45,6 +45,7 @@ app.post('/link', cors(), function (req, res) {
         let newItem = {
             "id": newID,
             "redirect": newUrl,
+            "account": "",
             "clicks": []
         }
 
