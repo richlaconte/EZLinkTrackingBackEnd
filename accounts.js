@@ -128,13 +128,49 @@ router.post('/link/:id', (req, res) => {
   }
 })
 
+// Return all links associated with account
+router.get('/links', (req, res) => {
+  if (req.body.email && req.body.password) {
+
+    let email = req.body.email;
+
+    client.connect(function (err) {
+      assert.equal(null, err);
+      console.log("Connected to the server");
+
+      const db = client.db(dbName);
+      const accounts = db.collection('Accounts');
+      const links = db.collection('track');
+
+      try {
+        links.find({ account: email }).toArray(function (err, docs) {
+          // Check if ID already exists
+          if (docs.length < 1) {
+            res.status(409);
+            return res.send("No links found.");
+          } else {
+            return res.send(docs);
+          }
+        })
+      } catch (err) {
+        console.log(err.message);
+        res.send(err.message);
+      }
+      client.close();
+    });
+
+  }
+  else {
+    res.send("Missing account name or password.");
+  }
+})
 
 // GET - Get Account
-router.get('/:id', (req, res) => {
+router.get('/', (req, res) => {
   res.send('Got Account: ' + req.params.id);
 })
 
-router.delete('/:id', (req, res) => {
+router.delete('/', (req, res) => {
   res.send('Deleted Account: ' + req.params.id)
 })
 
