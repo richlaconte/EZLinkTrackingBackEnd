@@ -15,7 +15,7 @@ app.use(cors());
 app.use(express.json());
 
 // Routes
-app.use('/accounts', accounts);
+app.use('/account', accounts);
 
 // Connection URL
 const url = process.env.DB;

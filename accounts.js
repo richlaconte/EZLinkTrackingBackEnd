@@ -74,8 +74,8 @@ router.post('/', (req, res) => {
 // POST - body: name: name, password: password
 
 // Check password before doing
-/*
-router.post('/links/:id', (req, res) => {
+
+router.post('/link/:id', (req, res) => {
   if (req.body.email && req.body.password) {
 
     let email = req.body.email;
@@ -85,11 +85,11 @@ router.post('/links/:id', (req, res) => {
       console.log("Connected to the server");
 
       const db = client.db(dbName);
-      const collection = db.collection('Accounts');
-      const links = db.collection('links');
+      const accounts = db.collection('Accounts');
+      const links = db.collection('track');
 
       try {
-        collection.find({ email: email }).toArray(function (err, docs) {
+        accounts.find({ email: email }).toArray(function (err, docs) {
           // Check if ID already exists
           if (docs.length < 1) {
             res.status(409);
@@ -100,6 +100,19 @@ router.post('/links/:id', (req, res) => {
               { $set: { account: req.body.email } }
             )
               .catch(err => console.log(err))
+
+            // Update account to show link id in array
+            // This is breaking things
+            /*
+            accounts.updateOne(
+              { "email": email },
+              { $push: { links: req.params.id } }
+            )
+              .catch(err => console.log(err))
+              .then(() => {
+                return res.send("Link " + req.params.id + " associated with account: " + req.body.email);
+              })
+              */
           }
         })
       } catch (err) {
@@ -114,7 +127,7 @@ router.post('/links/:id', (req, res) => {
     res.send("Missing account name or password.");
   }
 })
-*/
+
 
 // GET - Get Account
 router.get('/:id', (req, res) => {
