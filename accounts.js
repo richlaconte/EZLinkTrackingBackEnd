@@ -30,10 +30,17 @@ router.post('/', (req, res) => {
     let newEmail = req.body.email;
     let newPassword = req.body.password;
 
+    let today = new Date();
+    // Added +1 to month to return 1-12 instead of 0-11
+    let month = today.getMonth() + 1;
+    let day = today.getDate();
+
     let newAccount = {
       "email": newEmail,
       "password": newPassword,
-      "links": []
+      "links": [],
+      "createdMonth": month,
+      "createdDay": day
     }
 
     client.connect(function (err) {
@@ -174,48 +181,4 @@ router.delete('/', (req, res) => {
   res.send('Deleted Account: ' + req.params.id)
 })
 
-/*
-const schema = buildSchema(`
-    type Account {
-        id: ID!
-        name: String!
-        password: String!
-    }
-`);
-
-class Account {
-  constructor(id, { name, password }) {
-    this.id = id;
-    this.name = name;
-    this.password = password;
-  }
-}
-
-let fakeDatabase = {};
-
-let root = {
-  createAccount: ({ input }) => {
-    let id = fakeDatabase.length;
-
-    fakeDatabase[id] = input;
-    return new Account(id, input);
-  },
-  getAccount: ({ id }) => {
-    if (!fakeDatabase[id]) {
-      throw new Error("no account found with id: " + id);
-    }
-    return new Account(id, fakeDatabase[id]);
-  }
-};
-
-// GRAPHQL VERSION
-router.use(
-  "/",
-  graphqlHTTP({
-    schema: schema,
-    rootValue: root,
-    graphiql: true
-  })
-);
-*/
 module.exports = router;
