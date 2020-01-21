@@ -99,13 +99,14 @@ router.post('/link/:id', (req, res) => {
       const links = db.collection('track');
 
       try {
+        /*
         accounts.find({ email: email }).toArray(function (err, docs) {
           // Check if ID already exists
           if (docs.length < 1) {
             res.status(409);
             return res.send("Account not found.");
           } else {
-            /*links.updateOne(
+            links.updateOne(
               { "id": req.params.id },
               { $set: { account: req.body.email } }
             )
@@ -113,24 +114,23 @@ router.post('/link/:id', (req, res) => {
 
             // Update account to show link id in array
             // This is breaking things
-            /*
-            accounts.updateOne(
-              { "email": email },
-              { $push: { links: req.params.id } }
-            )
-              .catch(err => console.log(err))
-              .then(() => {
-                return res.send("Link " + req.params.id + " associated with account: " + req.body.email);
-              })
-              */
-            console.log(docs);
-          }
-        })
+            */
+        accounts.updateOne(
+          { "email": email },
+          { $push: { links: req.params.id } }
+        )
+          .catch(err => console.log(err))
+          .then(() => {
+            return res.send("Link " + req.params.id + " associated with account: " + req.body.email);
+          })
+        /*
+    }
+  })*/
       } catch (err) {
         console.log(err.message);
         res.send(err.message);
       }
-      client.close();
+      //client.close();
     });
 
   }
