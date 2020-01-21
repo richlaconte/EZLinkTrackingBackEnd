@@ -73,7 +73,7 @@ app.post('/link', cors(), function (req, res) {
                 console.log(err.message);
                 res.send(err.message);
             }
-            client.close();
+            //client.close();
         });
 
     }
@@ -120,7 +120,7 @@ app.get('/link/:id/', cors(), function (req, res) {
                 res.send(err.message)
             }
         })
-        client.close();
+        //client.close();
     })
 })
 
@@ -145,7 +145,7 @@ app.get('/stats/:id', cors(), function (req, res) {
                 res.send(docs[0].clicks);
             }
         })
-        client.close();
+        //client.close();
     })
 })
 

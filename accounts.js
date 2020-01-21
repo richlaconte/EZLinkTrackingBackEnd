@@ -39,6 +39,9 @@ router.post('/', (req, res) => {
       "email": newEmail,
       "password": newPassword,
       "links": [],
+      "contacts": [],
+      "forms": [],
+      "endpoints": [],
       "createdMonth": month,
       "createdDay": day
     }
@@ -102,7 +105,7 @@ router.post('/link/:id', (req, res) => {
             res.status(409);
             return res.send("Account not found.");
           } else {
-            links.updateOne(
+            /*links.updateOne(
               { "id": req.params.id },
               { $set: { account: req.body.email } }
             )
@@ -120,6 +123,7 @@ router.post('/link/:id', (req, res) => {
                 return res.send("Link " + req.params.id + " associated with account: " + req.body.email);
               })
               */
+            console.log(docs);
           }
         })
       } catch (err) {
