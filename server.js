@@ -5,6 +5,7 @@ const cors = require('cors');
 const dotenv = require('dotenv');
 const app = express();
 const accounts = require('./accounts');
+const blocks = require('./blocks');
 
 // Dotenv Config
 dotenv.config({
@@ -16,6 +17,7 @@ app.use(express.json());
 
 // Routes
 app.use('/account', accounts);
+app.use('/block', blocks);
 
 // Connection URL
 const url = process.env.DB;

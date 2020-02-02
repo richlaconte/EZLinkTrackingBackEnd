@@ -1,6 +1,4 @@
 const express = require("express");
-const graphqlHTTP = require("express-graphql");
-const { buildSchema } = require("graphql");
 const MongoClient = require('mongodb').MongoClient;
 const assert = require('assert');
 const cors = require('cors');
@@ -42,6 +40,7 @@ router.post('/', (req, res) => {
       "contacts": [],
       "forms": [],
       "endpoints": [],
+      "blocks": [],
       "createdMonth": month,
       "createdDay": day
     }
@@ -70,7 +69,6 @@ router.post('/', (req, res) => {
         console.log(err.message);
         res.send(err.message);
       }
-      client.close();
     });
 
   }
@@ -84,7 +82,6 @@ router.post('/', (req, res) => {
 // POST - body: name: name, password: password
 
 // Check password before doing
-
 router.post('/link/:id', (req, res) => {
   if (req.body.email && req.body.password) {
 
