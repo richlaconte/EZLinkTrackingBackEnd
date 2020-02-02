@@ -55,6 +55,12 @@ router.post('/create', (req, res) => {
 
             let unique = uuidv4();
 
+            forms.find({ unique }).toArray((err, docs) => {
+                if (docs.length > 0) {
+                    uuidv4();
+                }
+            })
+
             let form = {
                 "name": req.body.form.name,
                 "unique": unique.toString(),
@@ -68,11 +74,6 @@ router.post('/create', (req, res) => {
                 "origin": req.get('origin'),
                 "html": req.body.form.html
             }
-            forms.find({ unique }).toArray((err, docs) => {
-                if (docs.length > 0) {
-                    uuidv4();
-                }
-            })
 
             accounts.find({ email: req.body.account }).toArray((err, docs) => {
                 if (docs.length > 0) {

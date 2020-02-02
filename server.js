@@ -7,6 +7,7 @@ const app = express();
 const accounts = require('./accounts');
 const blocks = require('./blocks');
 const forms = require('./forms');
+const contacts = require('./contacts');
 
 // Dotenv Config
 dotenv.config({
@@ -20,6 +21,7 @@ app.use(express.json());
 app.use('/account', accounts);
 app.use('/block', blocks);
 app.use('/form', forms)
+app.use('/contact', contacts);
 
 // Connection URL
 const url = process.env.DB;
