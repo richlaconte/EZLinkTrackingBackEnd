@@ -16,7 +16,7 @@ dotenv.config({
 
 app.use(cors());
 app.use(express.json());
-
+//test
 // Routes
 app.use('/account', accounts);
 app.use('/block', blocks);

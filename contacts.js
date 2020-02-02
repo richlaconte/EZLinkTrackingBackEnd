@@ -108,6 +108,7 @@ router.post('/create', (req, res) => {
     }
 })
 
+// Get all contacts on account
 router.get("/", (req, res) => {
     if (req.body.account && req.body.password) {
         client.connect((err) => {

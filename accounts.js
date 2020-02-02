@@ -76,109 +76,40 @@ router.post('/', (req, res) => {
   }
 })
 
-// Associate a link to an account
-// Give link account: account
-// POST - body: name: name, password: password
-
-// Check password before doing
-router.post('/link/:id', (req, res) => {
+// Log in 
+router.get('/login', (req, res) => {
   if (req.body.email && req.body.password) {
-
-    let email = req.body.email;
 
     client.connect(function (err) {
       assert.equal(null, err);
       console.log("Connected to the server");
 
       const db = client.db(dbName);
-      const accounts = db.collection('Accounts');
-      const links = db.collection('track');
+      const collection = db.collection('Accounts');
 
       try {
-        /*
-        accounts.find({ email: email }).toArray(function (err, docs) {
+        collection.find({ email: newEmail }).toArray(function (err, docs) {
           // Check if ID already exists
-          if (docs.length < 1) {
-            res.status(409);
-            return res.send("Account not found.");
+          if (docs.length > 0) {
+            if (docs[0].password === req.body.password) {
+              res.status(200).send("Logged in");
+            } else {
+              res.status(500).send("Incorrect password");
+            }
           } else {
-            links.updateOne(
-              { "id": req.params.id },
-              { $set: { account: req.body.email } }
-            )
-              .catch(err => console.log(err))
-
-            // Update account to show link id in array
-            // This is breaking things
-            */
-        accounts.updateOne(
-          { "email": email },
-          { $push: { links: req.params.id } }
-        )
-          .catch(err => console.log(err))
-          .then(() => {
-            return res.send("Link " + req.params.id + " associated with account: " + req.body.email);
-          })
-        /*
-    }
-  })*/
-      } catch (err) {
-        console.log(err.message);
-        res.send(err.message);
-      }
-      //client.close();
-    });
-
-  }
-  else {
-    res.send("Missing account name or password.");
-  }
-})
-
-// Return all links associated with account
-router.get('/links', (req, res) => {
-  if (req.body.email && req.body.password) {
-
-    let email = req.body.email;
-
-    client.connect(function (err) {
-      assert.equal(null, err);
-      console.log("Connected to the server");
-
-      const db = client.db(dbName);
-      const accounts = db.collection('Accounts');
-      const links = db.collection('track');
-
-      try {
-        links.find({ account: email }).toArray(function (err, docs) {
-          // Check if ID already exists
-          if (docs.length < 1) {
-            res.status(409);
-            return res.send("No links found.");
-          } else {
-            return res.send(docs);
+            res.status(500).send("Can't find account with that email");
           }
         })
       } catch (err) {
         console.log(err.message);
-        res.send(err.message);
+        res.status(500).send(err.message);
       }
-      client.close();
     });
 
   }
   else {
-    res.send("Missing account name or password.");
+    res.status(500).send("Missing name or password.");
   }
-})
-
-// GET - Get Account
-router.get('/', (req, res) => {
-  res.send('Got Account: ' + req.params.id);
-})
-
-router.delete('/', (req, res) => {
-  res.send('Deleted Account: ' + req.params.id)
 })
 
 module.exports = router;
