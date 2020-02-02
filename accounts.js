@@ -39,7 +39,6 @@ router.post('/', (req, res) => {
       "links": [],
       "contacts": [],
       "forms": [],
-      "endpoints": [],
       "blocks": [],
       "createdMonth": month,
       "createdDay": day
