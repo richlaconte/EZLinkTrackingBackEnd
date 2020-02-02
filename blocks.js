@@ -85,8 +85,11 @@ router.get('/', (req, res) => {
 
 router.get('/test', (req, res) => {
     let ip = req.connection.remoteAddress;
-    let geo = geoip.lookup(ip);
-
+    console.log(ip);
+    let parsed = req.connection.remoteAddress.split(":");
+    console.log(parsed[2]);
+    let geo = geoip.lookup(parsed[2]);
+    console.log(geo);
     res.send(geo);
 })
 
