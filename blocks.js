@@ -81,6 +81,11 @@ router.get('/', (req, res) => {
     }
 })
 
+router.get('/test', (req, res) => {
+    let ip = req.connection.remoteAddress;
+    res.send(ip);
+})
+
 // Get specific block from account
 router.get('/:index', (req, res) => {
     if (req.body.email && req.body.password) {
