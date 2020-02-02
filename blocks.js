@@ -5,6 +5,8 @@ const cors = require('cors');
 const dotenv = require('dotenv');
 const router = express.Router();
 
+const geoip = require('geoip-lite');
+
 dotenv.config({
     path: './.env'
 });
@@ -83,7 +85,9 @@ router.get('/', (req, res) => {
 
 router.get('/test', (req, res) => {
     let ip = req.connection.remoteAddress;
-    res.send(ip);
+    let geo = geoip.lookup(ip);
+
+    res.send(geo);
 })
 
 // Get specific block from account
