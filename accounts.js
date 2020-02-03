@@ -88,7 +88,7 @@ router.get('/login', (req, res) => {
       const collection = db.collection('Accounts');
 
       try {
-        collection.find({ email: newEmail }).toArray(function (err, docs) {
+        collection.find({ email: req.body.email }).toArray(function (err, docs) {
           // Check if ID already exists
           if (docs.length > 0) {
             if (docs[0].password === req.body.password) {
