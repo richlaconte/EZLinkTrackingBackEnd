@@ -79,7 +79,7 @@ router.post('/', (req, res) => {
 })
 
 // Log in 
-router.get('/login', (req, res) => {
+router.post('/login', (req, res) => {
   if (req.body.email && req.body.password) {
 
     client.connect(function (err) {
