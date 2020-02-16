@@ -66,12 +66,14 @@ router.post('/', (req, res) => {
         })
       } catch (err) {
         console.log(err.message);
+        res.status(409);
         res.send(err.message);
       }
     });
 
   }
   else {
+    res.status(409);
     res.send("Missing name or password.");
   }
 })
@@ -92,17 +94,17 @@ router.get('/login', (req, res) => {
           // Check if ID already exists
           if (docs.length > 0) {
             if (docs[0].password === req.body.password) {
-              res.status(200).send("Logged in");
+              res.status(200).send(docs[0]);
             } else {
-              res.status(500).send("Incorrect password");
+              res.status(409).send("Incorrect password");
             }
           } else {
-            res.status(500).send("Can't find account with that email");
+            res.status(409).send("Can't find account with that email");
           }
         })
       } catch (err) {
         console.log(err.message);
-        res.status(500).send(err.message);
+        res.status(409).send(err.message);
       }
     });
 
