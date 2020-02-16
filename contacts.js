@@ -76,7 +76,8 @@ router.post('/create', (req, res) => {
                     if (docs[0].password === req.body.password) {
                         for (contact in docs[0].contacts) {
                             if (contact.email === contact.email) {
-                                res.send("Contact with that email already exists on account");
+                                res.status(409).send("Contact with that email already exists on account");
+                                break;
                             }
                         }
                         try {
