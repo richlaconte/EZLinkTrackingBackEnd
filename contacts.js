@@ -72,14 +72,15 @@ router.post('/create', (req, res) => {
             }
 
             accounts.find({ email: req.body.account }).toArray((err, docs) => {
+                let exists = false;
                 if (docs.length > 0) {
                     if (docs[0].password === req.body.password) {
-                        for (contact in docs[0].contacts) {
-                            if (contact.email === contact.email) {
-                                res.status(409).send("Contact with that email already exists on account");
-                                break;
+                        for (let i = 0; i < docs[0].contacts.length; i++) {
+                            if (docs[0].contacts[i].email === contact.email) {
+                                exists = true;
                             }
                         }
+                        
                         try {
                             accounts.updateOne(
                                 { "email": req.body.account },
@@ -95,14 +96,18 @@ router.post('/create', (req, res) => {
                 } else {
                     res.send("No accounts found with that email");
                 }
+                if (exists === true) {
+                    res.status(409).send("Contact with that email already exists on account");
+                } else {
+                    try {
+                        contacts.insertOne(contact)
+                    } catch (err) {
+                        console.log(err.message);
+                        res.send(err.message);
+                    }
+                    res.send("Successfully created contact");
+                }
             })
-            try {
-                contacts.insertOne(contact)
-            } catch (err) {
-                console.log(err.message);
-                res.send(err.message);
-            }
-            res.send("Successfully created contact");
         })
     } else {
         res.status(500).send("Missing account or password");
