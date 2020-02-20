@@ -110,7 +110,7 @@ router.post('/create', (req, res) => {
             })
         })
     } else {
-        res.status(500).send("Missing account or password");
+        res.status(409).send("Missing account or password");
     }
 })
 
