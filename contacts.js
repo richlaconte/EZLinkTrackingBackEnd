@@ -38,7 +38,7 @@ router.post('/create', (req, res) => {
     if (contact.forms) { forms = contact.forms }
 
     if (contact.email === "" || !contact.email) {
-        res.status(500).send("Missing email");
+        res.status(409).send("Missing email");
     }
 
     if (req.body.account && req.body.password) {
@@ -146,7 +146,7 @@ router.get("/", (req, res) => {
             })
         })
     } else {
-        res.status(500).send("Missing account or password");
+        res.status(409).send("Missing account or password");
     }
 })
 
