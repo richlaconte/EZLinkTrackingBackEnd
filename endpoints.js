@@ -24,7 +24,7 @@ router.use((req, res, next) => {
     next();
 })
 
-let template = `let test = (req) => { let object = {url: "https://enic23h1g656j.x.pipedream.net/", body: {"test1": "1", "test2": "2"}};return object;} test();`
+let template = `let test = (req) => { let object = {url: "https://enic23h1g656j.x.pipedream.net/", body: req};return object;}; test(req);`
 
 router.post('/create/', (req, res) => {
     client.connect((err) => {
@@ -74,12 +74,12 @@ router.post('/consume/:url', (req, res) => {
             theFunction += "" + test;
             console.log(theFunction);
             let object = eval(theFunction);
-
+            console.log("object", object);
             axios.post(object.url, object.body)
             .then(function (response) {
-                console.log(response);
+                //console.log(response);
                 if (response.status === 200) {
-                    console.log(response.data);
+                   // console.log(response.data);
                     return true;
                 } else {
                     console.log(response);
